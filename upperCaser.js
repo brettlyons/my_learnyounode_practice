@@ -1,8 +1,14 @@
 var http = require('http');
-var tmap = requrie('through2-map');
+var map = require('through2-map');
 
 var server = http.createServer(function (request, response){
+  if(request.method != 'POST'){
+    return res.end('send me a POST\n');
+  }
+  request.pipe(map(function (chunkOfStream){
+    return chunkOfStream.toString().toUpperCase();
+  })).pipe(response);
 
 })
 
-server.listen(process.argv[2]); // port number 80
+server.listen(Number(process.argv[2])); // port number 80
